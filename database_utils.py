@@ -16,29 +16,6 @@ class DatabaseConnector:
                 print(exc)
         
         return creds
-    
-    def init_db_engine_v1(self):
-        creds = self.read_db_creds()
-
-        DATABASE_TYPE = 'postgresql'
-        DBAPI = 'psycopg2'
-        HOST = creds['RDS_HOST']
-        USER = creds['RDS_USER']
-        PASSWORD = creds['RDS_PASSWORD']
-        DATABASE = creds['RDS_DATABASE']
-        PORT = creds['RDS_PORT']
-
-        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-
-        engine = create_engine(f'postgresql+psycopg2://{USER}:{PASSWORD}\@{HOST}/{DATABASE}')
-
-        engine = create_engine(f'postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}')
-
-        engine = create_engine(f"postgresql+pg8000://user:pa$$w0rd@12.34.56.789/mydatabase?charset=utf8mb4")
-
-        engine.execution_options(isolation_level='AUTOCOMMIT').connect()
-
-        return engine
 
     def init_db_engine(self):
         credentials = self.read_db_creds()
@@ -57,14 +34,15 @@ class DatabaseConnector:
 
         return table_names
 
+
+# For testing engine connection to RDS dataset
+""" 
 # Test class
 test = DatabaseConnector()
 table_names = test.list_db_tables()
 
 print(table_names)
 
-# For testing engine connection to RDS dataset
-""" 
 with engine.execution_options(isolation_level='AUTOCOMMIT').connect() as conn:
     # Reflect the metadata of the database tables
     metadata = MetaData()
