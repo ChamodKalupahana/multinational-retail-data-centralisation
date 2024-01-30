@@ -34,12 +34,12 @@ class DatabaseConnector:
 
         return table_names
 
-
+if __name__ == "__main__":
+    # Test class
+    test = DatabaseConnector()
+    table_names = test.list_db_tables()
 # For testing engine connection to RDS dataset
 """ 
-# Test class
-test = DatabaseConnector()
-table_names = test.list_db_tables()
 
 print(table_names)
 
