@@ -39,9 +39,6 @@ if __name__ == "__main__":
     # print(table)
 
     pdf = test.retrieve_pdf_data()
-    print(pdf)
+    #print(pdf)
 
-
-for i in range(card_details):
-    print(i)
 

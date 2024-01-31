@@ -118,9 +118,10 @@ class DataCleaning:
         return table
     
     def clean_card_data(self, card_details):
+        card_details['card_number'] = card_details['card_number'].astype(int)
 
         card_details.info()
-        card_details.head()
+
         return
 if __name__ == '__main__':
     from data_extraction import DataExtractor
