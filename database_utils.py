@@ -38,10 +38,11 @@ if __name__ == "__main__":
     # Test class
     test = DatabaseConnector()
     table_names = test.list_db_tables()
+    print(table_names)
+    
 # For testing engine connection to RDS dataset
 """ 
 
-print(table_names)
 
 with engine.execution_options(isolation_level='AUTOCOMMIT').connect() as conn:
     # Reflect the metadata of the database tables
