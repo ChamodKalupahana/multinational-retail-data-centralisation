@@ -3,6 +3,8 @@ import yaml
 from sqlalchemy import create_engine, MetaData
 import pandas as pd
 
+from data_cleaning import DataCleaning
+
 # Define class
 class DatabaseConnector:
     def __init__(self) -> None:
@@ -33,13 +35,34 @@ class DatabaseConnector:
         table_names = pd.DataFrame(metadata.tables.keys())
 
         return table_names
+    
+    def upload_to_db(self, table_to_upload, name_of_database):
+
+        # Define the database connection URL
+        db_url = 'postgresql://postgres:Coolx12378@localhost/sales_data'
+
+        # Create a SQLAlchemy engine
+        engine = create_engine(db_url)
+
+        # Upload the cleaned DataFrame to the dim_users table in the sales_data database
+        table_to_upload.to_sql(name_of_database, engine, if_exists='replace', index=False)
+        pass
 
 if __name__ == "__main__":
+
+    
     # Test class
     test = DatabaseConnector()
     table_names = test.list_db_tables()
     print(table_names)
-    
+
+    from data_extraction import DataExtractor
+    DataExtractor_instance = DataExtractor()
+    DataCleaning_instance = DataCleaning()
+    table = DataCleaning_instance.clean_user_data(DataExtractor_instance, test)
+
+    test.upload_to_db(table, 'dim_users')
+
 # For testing engine connection to RDS dataset
 """ 
 

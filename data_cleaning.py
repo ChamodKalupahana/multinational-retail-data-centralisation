@@ -1,9 +1,6 @@
 # Import modules
 import pandas as pd
 
-from data_extraction import DataExtractor
-from database_utils import DatabaseConnector
-
 class DataCleaning:
     def __init__(self) -> None:
         pass
@@ -50,7 +47,7 @@ class DataCleaning:
         table.info()
         return table
     
-    def clean_user_data(self, DataExtractor_instance):
+    def clean_user_data(self, DataExtractor_instance, DatabaseConnector_instance):
         table = DataExtractor_instance.read_rds_table(DatabaseConnector_instance, table_name = 'legacy_users')
 
         # Clean first_name
@@ -121,9 +118,12 @@ class DataCleaning:
         return table
 
 if __name__ == '__main__':
+    from data_extraction import DataExtractor
+    from database_utils import DatabaseConnector
+
     test = DataCleaning()
     DataExtractor_instance = DataExtractor()
     DatabaseConnector_instance = DatabaseConnector()
 
-    table = test.clean_user_data_orders_table(DataExtractor_instance)
+    table = test.clean_user_data_orders_table(DataExtractor_instance, DatabaseConnector_instance)
     print(table.head())
