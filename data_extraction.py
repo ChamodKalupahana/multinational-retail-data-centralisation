@@ -20,9 +20,16 @@ class DataExtractor:
 
         card_details = ta.read_pdf(pdf_path, pages='all')
 
-        return pd.DataFrame(card_details)
+        card_details_df = card_details[0]
 
+        for i in card_details:
+            card_details_df = pd.concat([card_details_df, i], ignore_index=True)
+        
+        return card_details_df
 
+"""columns = ['card_number', 'expiry_date', 'card_provider', 'date_payment_confirmed']
+card_details_df = pd.DataFrame(columns=columns)
+card_details_df = card_details_df.append(i, ignore_index=True)"""
 # only run if this file is run
 if __name__ == "__main__":
     test = DataExtractor()
@@ -33,4 +40,8 @@ if __name__ == "__main__":
 
     pdf = test.retrieve_pdf_data()
     print(pdf)
+
+
+for i in range(card_details):
+    print(i)
 

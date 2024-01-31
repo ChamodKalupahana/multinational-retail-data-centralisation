@@ -116,7 +116,12 @@ class DataCleaning:
                 
         table.info()
         return table
+    
+    def clean_card_data(self, card_details):
 
+        card_details.info()
+        card_details.head()
+        return
 if __name__ == '__main__':
     from data_extraction import DataExtractor
     from database_utils import DatabaseConnector
@@ -125,5 +130,8 @@ if __name__ == '__main__':
     DataExtractor_instance = DataExtractor()
     DatabaseConnector_instance = DatabaseConnector()
 
-    table = test.clean_user_data_orders_table(DataExtractor_instance, DatabaseConnector_instance)
-    print(table.head())
+    # table = test.clean_user_data_orders_table(DataExtractor_instance, DatabaseConnector_instance)
+    # print(table.head())
+
+    card_details = DataExtractor_instance.retrieve_pdf_data()
+    test.clean_card_data(card_details)
