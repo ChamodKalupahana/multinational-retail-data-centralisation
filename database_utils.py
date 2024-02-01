@@ -53,15 +53,21 @@ if __name__ == "__main__":
     
     # Test class
     test = DatabaseConnector()
-    table_names = test.list_db_tables()
-    print(table_names)
+    # table_names = test.list_db_tables()
+    # print(table_names)
 
     from data_extraction import DataExtractor
     DataExtractor_instance = DataExtractor()
     DataCleaning_instance = DataCleaning()
-    table = DataCleaning_instance.clean_user_data(DataExtractor_instance, test)
+    # table = DataCleaning_instance.clean_user_data(DataExtractor_instance, test)
 
-    test.upload_to_db(table, 'dim_users')
+    # test.upload_to_db(table, 'dim_users')
+
+    # upload store data from api
+    
+    store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
+    test.upload_to_db(store_data, 'dim_store_details')
+
 
 # For testing engine connection to RDS dataset
 """ 

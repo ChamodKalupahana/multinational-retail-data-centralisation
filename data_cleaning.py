@@ -139,12 +139,12 @@ class DataCleaning:
 
         return
     
-    def called_clean_store_data(self):
+    def called_clean_store_data(self, DataExtractor_instance):
         
-        table = pd.read_csv('stores_dataset.csv')
+        retrieve_store_url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/{store_number}'
+        header_dict ={'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
 
-        # Get rid of Unnamed column and lat columns which contain mostly nans
-        table = table.drop(columns=['Unnamed: 0'])
+        table = DataExtractor_instance.retrieve_stores_data(retrieve_store_url, header_dict)
 
         # Clean address 
         table['address'] = table['address'].str.replace('\n', ' ')
