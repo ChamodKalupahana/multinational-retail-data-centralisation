@@ -103,6 +103,9 @@ if __name__ == "__main__":
     # print(store_data)
 
     address = 's3://data-handling-public/products.csv'
-    table = test.extract_from_s3(address)
+    date_times_address = 's3://data-handling-public/products.csv'
+    #table = test.extract_from_s3(address)
+
+    table = test.extract_from_s3(date_times_address)
 
 

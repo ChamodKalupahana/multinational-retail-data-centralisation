@@ -68,9 +68,18 @@ if __name__ == "__main__":
 
     # upload product data from s3
 
-    product_data = DataCleaning_instance.clean_products_data(DataExtractor_instance)
-    test.upload_to_db(product_data, 'dim_products')
+    # product_data = DataCleaning_instance.clean_products_data(DataExtractor_instance)
+    # test.upload_to_db(product_data, 'dim_products')
 
+    # upload user_order
+
+    # user_order_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
+    # test.upload_to_db(user_order_data, 'orders_table')
+
+    # upload date_time_data
+
+    date_time_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
+    test.upload_to_db(date_time_data, 'dim_date_times')
 
 # For testing engine connection to RDS dataset
 """ 

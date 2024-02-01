@@ -89,7 +89,7 @@ class DataCleaning:
         table.info()
         return table
 
-    def clean_user_data_orders_table(self, DataExtractor_instance):
+    def clean_orders_data(self, DataExtractor_instance, DatabaseConnector_instance):
         table = DataExtractor_instance.read_rds_table(DatabaseConnector_instance, table_name = 'orders_table')  
 
         # Clean first_name
@@ -111,8 +111,8 @@ class DataCleaning:
         # Clean product_code
         table['product_code'] = table['product_code'].astype(str)
 
-        # Drop 1 column, contains no columns
-        table.drop(columns=['1'], inplace=True)
+        # Drop 1, first_name, last_name column, contains no columns
+        table.drop(columns=['1', 'first_name', 'last_name'], inplace=True)
 
                 
         table.info()
@@ -257,6 +257,65 @@ class DataCleaning:
         table.info()
 
         return table
+    
+    def clean_date_times(self, DataExtractor_instance):
+        date_times_address = 's3://data-handling-public/products.csv'
+        table = DataExtractor_instance.extract_from_s3(date_times_address)
+
+         # Drop unnamed column, contains no columns
+        table.drop(columns=['Unnamed: 0'], inplace=True)
+
+        # Clean product_name
+        table['product_name'] = table['product_name'].astype(str)
+
+        # Remove the currency symbol and convert to float
+        table['product_price'] = table['product_price'].str.replace('£', '')
+        table['product_price'] = pd.to_numeric(table['product_price'], errors='coerce')
+        table['product_price'] = table['product_price'].astype(float)
+
+                # Function to clean and convert weight to kg
+        def clean_and_convert_weight(x):
+            x = str(x).strip()  # Remove leading/trailing whitespaces
+            if 'g' in x:
+                weight = x.replace('g', '')
+            elif 'kg' in x:
+                weight = x.replace('kg', '')
+            elif 'k' in x:
+                weight = x.replace('kg', '')
+            elif 'ml' in x:  # Convert ml to g
+                weight = float(x.replace('ml', '')) * 1  # Use a 1:1 ratio for ml to g
+            elif 'oz' in x:  # Convert oz to g
+                weight = float(x.replace('oz', '')) * 28.35  # Approximate 1 oz to 28.35 g
+            else:
+                return np.nan
+            
+            try:
+                return float(weight) / 1000  # Convert to kg
+            except ValueError:
+                return np.nan  # Return NaN for non-numeric values
+
+        # Apply function to clean and convert weight column
+        table['weight'] = table['weight'].apply(clean_and_convert_weight)
+
+        # Clean category
+        table['category'] = table['category'].astype(str)
+
+        # Clean EAN
+        table['EAN'] = table['EAN'].astype(str)
+
+        # Clean date_added
+        table['date_added'] = pd.to_datetime(table['date_added'], format='mixed', errors='coerce')
+
+        # Clean user_uuid
+        table['uuid'] = table['uuid'].astype(str)
+
+        # Clean removed
+        table['removed'] = table['removed'].astype(str)
+
+        # Clean product_code
+        table['product_code'] = table['product_code'].astype(str)
+
+        return table
 
 
 if __name__ == '__main__':
@@ -267,7 +326,7 @@ if __name__ == '__main__':
     DataExtractor_instance = DataExtractor()
     DatabaseConnector_instance = DatabaseConnector()
 
-    # table = test.clean_user_data_orders_table(DataExtractor_instance, DatabaseConnector_instance)
+    #table = test.clean_orders_data(DataExtractor_instance, DatabaseConnector_instance)
     # print(table.head())
 
     # card_details = DataExtractor_instance.retrieve_pdf_data()
@@ -275,4 +334,4 @@ if __name__ == '__main__':
 
     # table = test.called_clean_store_data()
 
-    table = test.clean_products_data(DataExtractor_instance)
+    table = test.clean_date_times(DataExtractor_instance)
