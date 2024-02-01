@@ -49,8 +49,6 @@ class DatabaseConnector:
         pass
 
 if __name__ == "__main__":
-
-    
     # Test class
     test = DatabaseConnector()
     # table_names = test.list_db_tables()
@@ -65,8 +63,13 @@ if __name__ == "__main__":
 
     # upload store data from api
     
-    store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
-    test.upload_to_db(store_data, 'dim_store_details')
+    # store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
+    # test.upload_to_db(store_data, 'dim_store_details')
+
+    # upload product data from s3
+
+    product_data = DataCleaning_instance.clean_products_data(DataExtractor_instance)
+    test.upload_to_db(product_data, 'dim_products')
 
 
 # For testing engine connection to RDS dataset

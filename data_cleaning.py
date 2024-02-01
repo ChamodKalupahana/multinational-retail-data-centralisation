@@ -275,4 +275,4 @@ if __name__ == '__main__':
 
     # table = test.called_clean_store_data()
 
-    test.clean_products_data(DataExtractor_instance)
+    table = test.clean_products_data(DataExtractor_instance)
