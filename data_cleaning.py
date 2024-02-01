@@ -185,6 +185,79 @@ class DataCleaning:
         table.info()
 
         return table
+    
+    def convert_product_weights(self, DataExtractor_instance):
+        address = 's3://data-handling-public/products.csv'
+        table = DataExtractor_instance.extract_from_s3(address)
+
+        # Convert ml to g using a 1:1 ratio
+        table['weight'] = table['weight'].str.replace('ml', 'g')
+
+        # Function to clean and convert weight to kg
+        def clean_and_convert_weight(x):
+            x = str(x).strip()  # Remove leading/trailing whitespaces
+            if 'g' in x:
+                weight = x.replace('g', '')
+            elif 'kg' in x:
+                weight = x.replace('kg', '')
+            elif 'k' in x:
+                weight = x.replace('kg', '')
+            elif 'ml' in x:  # Convert ml to g
+                weight = float(x.replace('ml', '')) * 1  # Use a 1:1 ratio for ml to g
+            elif 'oz' in x:  # Convert oz to g
+                weight = float(x.replace('oz', '')) * 28.35  # Approximate 1 oz to 28.35 g
+            else:
+                return np.nan
+            
+            try:
+                return float(weight) / 1000  # Convert to kg
+            except ValueError:
+                return np.nan  # Return NaN for non-numeric values
+
+        # Apply function to clean and convert weight column
+        table['weight'] = table['weight'].apply(clean_and_convert_weight)
+
+        table.dropna(subset=['weight'], inplace=True) # Drop rows with NaN values (approx. 11)
+
+        table.info()
+
+        return table
+    
+    def clean_products_data(self, DataExtractor_instance):
+
+        table = self.convert_product_weights(DataExtractor_instance)
+
+        # Drop unnamed column, contains no columns
+        table.drop(columns=['Unnamed: 0'], inplace=True)
+
+        # Clean product_name
+        table['product_name'] = table['product_name'].astype(str)
+
+        # Remove the currency symbol and convert to float
+        table['product_price'] = table['product_price'].str.replace('£', '').astype(float)
+
+        # Clean category
+        table['category'] = table['category'].astype(str)
+
+        # Clean EAN
+        table['EAN'] = table['EAN'].astype(str)
+
+        # Clean date_added
+        table['date_added'] = pd.to_datetime(table['date_added'], format='mixed')
+
+        # Clean user_uuid
+        table['uuid'] = table['uuid'].astype(str)
+
+        # Clean removed
+        table['removed'] = table['removed'].astype(str)
+
+        # Clean product_code
+        table['product_code'] = table['product_code'].astype(str)
+
+        table.info()
+
+        return table
+
 
 if __name__ == '__main__':
     from data_extraction import DataExtractor
@@ -200,4 +273,6 @@ if __name__ == '__main__':
     # card_details = DataExtractor_instance.retrieve_pdf_data()
     # test.clean_card_data(card_details)
 
-    table = test.called_clean_store_data()
+    # table = test.called_clean_store_data()
+
+    test.clean_products_data(DataExtractor_instance)
