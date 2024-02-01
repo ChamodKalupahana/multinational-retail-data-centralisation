@@ -139,6 +139,53 @@ class DataCleaning:
 
         return
     
+    def called_clean_store_data(self):
+        
+        table = pd.read_csv('stores_dataset.csv')
+
+        # Get rid of Unnamed column and lat columns which contain mostly nans
+        table = table.drop(columns=['Unnamed: 0'])
+
+        # Clean address 
+        table['address'] = table['address'].str.replace('\n', ' ')
+        table['address'] = table['address'].astype(str)
+
+        # Clean longitude
+        table['longitude'] = pd.to_numeric(table['longitude'], errors='coerce')
+        table.dropna(subset=['longitude'], inplace=True) # Drop rows with NaN values (approx. 11)
+
+        # Drop lat column, contains no columns
+        table.drop(columns=['lat'], inplace=True)
+
+        # Clean locality
+        table['locality'] = table['locality'].astype(str)
+
+        # Clean store_code
+        table['store_code'] = table['store_code'].astype(str)
+
+        # Clean staff_numbers
+        table['staff_numbers'] = table['staff_numbers'].astype(str)
+
+        # Clean opening_date
+        table['opening_date'] = pd.to_datetime(table['opening_date'], format='mixed')
+
+        # Clean store_type
+        table['store_type'] = table['store_type'].astype(str)
+
+        # Clean latitude
+        table['latitude'] = table['latitude'].astype(float)
+
+        # Clean country_code
+        table['country_code'] = table['country_code'].astype(str)
+
+        # Clean continent
+        table['continent'] = table['continent'].replace({'eeEurope': 'Europe', 'eeAmerica': 'America'})
+        table['continent'] = table['continent'].astype(str)
+
+        table.info()
+
+        return table
+
 if __name__ == '__main__':
     from data_extraction import DataExtractor
     from database_utils import DatabaseConnector
@@ -150,5 +197,7 @@ if __name__ == '__main__':
     # table = test.clean_user_data_orders_table(DataExtractor_instance, DatabaseConnector_instance)
     # print(table.head())
 
-    card_details = DataExtractor_instance.retrieve_pdf_data()
-    test.clean_card_data(card_details)
+    # card_details = DataExtractor_instance.retrieve_pdf_data()
+    # test.clean_card_data(card_details)
+
+    table = test.called_clean_store_data()
