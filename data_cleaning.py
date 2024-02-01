@@ -1,5 +1,6 @@
 # Import modules
 import pandas as pd
+import numpy as np
 
 class DataCleaning:
     def __init__(self) -> None:
@@ -118,11 +119,26 @@ class DataCleaning:
         return table
     
     def clean_card_data(self, card_details):
-        card_details['card_number'] = card_details['card_number'].astype(int)
+        # Clean card_number
+        card_details['card_number'] = card_details['card_number'].astype(str)
+
+        # Clean expiry_date
+        card_details['expiry_date'] = card_details['expiry_date'].astype(str)
+
+        # Clean card_provider
+        card_details['card_provider'] = card_details['card_provider'].astype(str)
+
+        # Clean date_payment_confirmed
+        # Replace non-date strings with NaN
+        card_details['date_payment_confirmed'] = pd.to_datetime(card_details['date_payment_confirmed'], errors='coerce')
+
+        # Drop rows with null values in 'date_payment_confirmed' column
+        card_details.dropna(subset=['date_payment_confirmed'], inplace=True)
 
         card_details.info()
 
         return
+    
 if __name__ == '__main__':
     from data_extraction import DataExtractor
     from database_utils import DatabaseConnector
