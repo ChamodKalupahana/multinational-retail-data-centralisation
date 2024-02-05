@@ -296,6 +296,7 @@ class DataCleaning:
 
         # Apply function to clean and convert weight column
         table['weight'] = table['weight'].apply(clean_and_convert_weight)
+        table.dropna(subset=['weight'], inplace=True) # Drop rows with NaN values (approx. 11)
 
         # Clean category
         table['category'] = table['category'].astype(str)

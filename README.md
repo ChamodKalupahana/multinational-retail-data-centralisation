@@ -2,15 +2,15 @@
 
 <img src="aicore_logo.jpg" width="100"/>
 
-You work for a multinational company that sells various goods across the globe.
+Welcome to the GitHub repository for the Multinational Retail Data Centralisation project!
 
-Currently, their sales data is spread across many different data sources making it not easily accessible or analysable by current members of the team.
+In this project, we address the challenge of consolidating sales data from various sources within a multinational company. Currently, the sales data is scattered across different data sources, making it difficult for team members to access and analyze efficiently.
 
-In an effort to become more data-driven, your organisation would like to make its sales data accessible from one centralised location.
+To tackle this issue and promote a more data-driven approach, our organization aims to centralize its sales data into a single, accessible location. Our primary objective is to develop a system that stores the company's current data in a database, serving as the authoritative source for sales data.
 
-Your first goal will be to produce a system that stores the current company data in a database so that it's accessed from one centralised location and acts as a single source of truth for sales data.
+By centralizing our sales data, we aim to streamline access and analysis processes, enabling team members to obtain up-to-date metrics for the business efficiently.
 
-You will then query the database to get up-to-date metrics for the business.
+This repository contains the code and ressources for implementing this data centralization system and querying the database for business metrics. Feel free to explore and contribute to our efforts in enhancing data accessibility and analysis within our organization.
 
 # Scripts Overview
 
