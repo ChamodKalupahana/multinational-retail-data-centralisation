@@ -79,6 +79,16 @@ class DatabaseConnector:
         table_to_upload.to_sql(name_of_database, engine, if_exists='replace', index=False)
         pass
 
+    def init_local_database(self):
+        # Define the database connection URL
+        db_url = 'postgresql://postgres:Coolx12378@localhost/sales_data'
+
+        # Create a SQLAlchemy engine
+        engine = create_engine(db_url)
+
+        return engine
+    
+    
 if __name__ == "__main__":
     # Test class
     test = DatabaseConnector()
