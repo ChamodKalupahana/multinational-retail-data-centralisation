@@ -3,10 +3,32 @@ import pandas as pd
 import numpy as np
 
 class DataCleaning:
+    """
+    A class for cleaning various types of data.
+
+    Methods:
+    - clean_user_data_legacy_store(DataExtractor_instance): Cleans legacy user data related to store details.
+    - clean_user_data(DataExtractor_instance, DatabaseConnector_instance): Cleans user data.
+    - clean_orders_data(DataExtractor_instance, DatabaseConnector_instance): Cleans orders data.
+    - clean_card_data(card_details): Cleans card details data.
+    - called_clean_store_data(DataExtractor_instance): Cleans store data.
+    - convert_product_weights(DataExtractor_instance): Converts product weights to a consistent unit.
+    - clean_products_data(DataExtractor_instance): Cleans product data.
+    - clean_date_times(DataExtractor_instance): Cleans date and time data.
+    """
     def __init__(self) -> None:
         pass
 
     def clean_user_data_legacy_store(self, DataExtractor_instance):
+        """
+        Cleans legacy user data related to store details.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned user data related to store details.
+        """
         table = DataExtractor_instance.read_rds_table(DatabaseConnector_instance, table_name = 'legacy_store_details')
 
         # Clean address
@@ -49,6 +71,16 @@ class DataCleaning:
         return table
     
     def clean_user_data(self, DataExtractor_instance, DatabaseConnector_instance):
+        """
+        Cleans user data.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+        DatabaseConnector_instance (DatabaseConnector): An instance of the DatabaseConnector class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned user data.
+        """
         table = DataExtractor_instance.read_rds_table(DatabaseConnector_instance, table_name = 'legacy_users')
 
         # Clean first_name
@@ -90,6 +122,16 @@ class DataCleaning:
         return table
 
     def clean_orders_data(self, DataExtractor_instance, DatabaseConnector_instance):
+        """ 
+        Cleans orders data.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+        DatabaseConnector_instance (DatabaseConnector): An instance of the DatabaseConnector class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned orders data.
+        """
         table = DataExtractor_instance.read_rds_table(DatabaseConnector_instance, table_name = 'orders_table')  
 
         # Clean first_name
@@ -118,7 +160,19 @@ class DataCleaning:
         table.info()
         return table
     
-    def clean_card_data(self, card_details):
+    def clean_card_data(self, DataExtractor_instance):
+        """
+        Cleans card details data.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned card details data.
+        """
+        # Get database
+        card_details = DataExtractor_instance.retrieve_pdf_data()
+
         # Clean card_number
         card_details['card_number'] = card_details['card_number'].astype(str)
 
@@ -137,10 +191,18 @@ class DataCleaning:
 
         card_details.info()
 
-        return
+        return card_details
     
     def called_clean_store_data(self, DataExtractor_instance):
-        
+        """
+        Cleans store data.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned store data.
+        """
         retrieve_store_url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/{store_number}'
         header_dict ={'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
 
@@ -187,6 +249,15 @@ class DataCleaning:
         return table
     
     def convert_product_weights(self, DataExtractor_instance):
+        """
+        Converts product weights to a consistent unit.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing converted product weights.
+        """
         address = 's3://data-handling-public/products.csv'
         table = DataExtractor_instance.extract_from_s3(address)
 
@@ -224,7 +295,15 @@ class DataCleaning:
         return table
     
     def clean_products_data(self, DataExtractor_instance):
+        """
+        Cleans product data.
 
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned product data.
+        """
         table = self.convert_product_weights(DataExtractor_instance)
 
         # Drop unnamed column, contains no columns
@@ -259,6 +338,15 @@ class DataCleaning:
         return table
     
     def clean_date_times(self, DataExtractor_instance):
+        """
+        Cleans date and time data.
+
+        Args:
+        DataExtractor_instance (DataExtractor): An instance of the DataExtractor class.
+
+        Returns:
+        pandas.core.frame.DataFrame: DataFrame containing cleaned date and time data.
+        """
         date_times_address = 's3://data-handling-public/products.csv'
         table = DataExtractor_instance.extract_from_s3(date_times_address)
 
