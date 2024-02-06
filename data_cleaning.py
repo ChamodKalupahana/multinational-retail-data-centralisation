@@ -347,62 +347,30 @@ class DataCleaning:
         Returns:
         pandas.core.frame.DataFrame: DataFrame containing cleaned date and time data.
         """
-        date_times_address = 's3://data-handling-public/products.csv'
-        table = DataExtractor_instance.extract_from_s3(date_times_address)
 
-         # Drop unnamed column, contains no columns
-        table.drop(columns=['Unnamed: 0'], inplace=True)
+        import json
 
-        # Clean product_name
-        table['product_name'] = table['product_name'].astype(str)
+        # load data from downloaded json file, loading file from aws took far too long
+        with open('date_details.json') as f:
+            table = json.load(f)
 
-        # Remove the currency symbol and convert to float
-        table['product_price'] = table['product_price'].str.replace('£', '')
-        table['product_price'] = pd.to_numeric(table['product_price'], errors='coerce')
-        table['product_price'] = table['product_price'].astype(float)
+        table = pd.DataFrame.from_dict(table)
 
-                # Function to clean and convert weight to kg
-        def clean_and_convert_weight(x):
-            x = str(x).strip()  # Remove leading/trailing whitespaces
-            if 'g' in x:
-                weight = x.replace('g', '')
-            elif 'kg' in x:
-                weight = x.replace('kg', '')
-            elif 'k' in x:
-                weight = x.replace('kg', '')
-            elif 'ml' in x:  # Convert ml to g
-                weight = float(x.replace('ml', '')) * 1  # Use a 1:1 ratio for ml to g
-            elif 'oz' in x:  # Convert oz to g
-                weight = float(x.replace('oz', '')) * 28.35  # Approximate 1 oz to 28.35 g
-            else:
-                return np.nan
-            
-            try:
-                return float(weight) / 1000  # Convert to kg
-            except ValueError:
-                return np.nan  # Return NaN for non-numeric values
+        # Replace invalid timestamp values with NaN
+        table['timestamp'] = pd.to_datetime(table['timestamp'], format='%H:%M:%S', errors='coerce')
 
-        # Apply function to clean and convert weight column
-        table['weight'] = table['weight'].apply(clean_and_convert_weight)
-        table.dropna(subset=['weight'], inplace=True) # Drop rows with NaN values (approx. 11)
+        # Drop rows with NaN values in the timestamp column
+        table = table.dropna(subset=['timestamp'])
 
-        # Clean category
-        table['category'] = table['category'].astype(str)
+        # Convert month, year, and day to integers
+        table['month'] = table['month'].astype(int)
+        table['year'] = table['year'].astype(int)
+        table['day'] = table['day'].astype(int)
 
-        # Clean EAN
-        table['EAN'] = table['EAN'].astype(str)
+        # Convert time_period to title case
+        table['time_period'] = table['time_period'].str.title()
 
-        # Clean date_added
-        table['date_added'] = pd.to_datetime(table['date_added'], format='mixed', errors='coerce')
-
-        # Clean user_uuid
-        table['uuid'] = table['uuid'].astype(str)
-
-        # Clean removed
-        table['removed'] = table['removed'].astype(str)
-
-        # Clean product_code
-        table['product_code'] = table['product_code'].astype(str)
+        table.info()
 
         return table
 
