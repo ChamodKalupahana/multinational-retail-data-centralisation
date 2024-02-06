@@ -88,7 +88,7 @@ class DatabaseConnector:
 
         return engine
     
-    
+
 if __name__ == "__main__":
     # Test class
     test = DatabaseConnector()
