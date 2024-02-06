@@ -127,8 +127,8 @@ if __name__ == "__main__":
 
     ### upload date_time_data
 
-    # date_time_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
-    # test.upload_to_db(date_time_data, 'dim_date_times')
+    date_time_data = DataCleaning_instance.clean_date_times(DataExtractor_instance)
+    test.upload_to_db(date_time_data, 'dim_date_times')
 
 
 
