@@ -358,6 +358,9 @@ class DataCleaning:
 
         # Replace invalid timestamp values with NaN
         table['timestamp'] = pd.to_datetime(table['timestamp'], format='%H:%M:%S', errors='coerce')
+        
+        # Extract time from datetime values
+        table['timestamp'] = table['timestamp'].dt.time
 
         # Drop rows with NaN values in the timestamp column
         table = table.dropna(subset=['timestamp'])
