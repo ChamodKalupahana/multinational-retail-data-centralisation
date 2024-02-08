@@ -106,8 +106,8 @@ if __name__ == "__main__":
 
     ### upload store data from api
     
-    # store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
-    # test.upload_to_db(store_data, 'dim_store_details')
+    store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
+    test.upload_to_db(store_data, 'dim_store_details')
 
     ### upload card_data
 
@@ -121,8 +121,8 @@ if __name__ == "__main__":
 
     ### upload user_order
 
-    user_order_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
-    test.upload_to_db(user_order_data, 'orders_table')
+    # user_order_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
+    # test.upload_to_db(user_order_data, 'orders_table')
 
     ### upload date_time_data
 
