@@ -1,4 +1,9 @@
 SELECT
-    user_uuid
+    COUNT(date_uuid),
+    month
 FROM
-    orders_table
+    dim_date_times
+GROUP BY
+    month
+ORDER BY
+    COUNT(date_uuid) DESC
