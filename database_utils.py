@@ -102,7 +102,6 @@ if __name__ == "__main__":
 
 
     # table = DataCleaning_instance.clean_user_data(DataExtractor_instance, test)
-
     # test.upload_to_db(table, 'dim_users')
 
     ### upload store data from api
@@ -122,13 +121,13 @@ if __name__ == "__main__":
 
     ### upload user_order
 
-    # user_order_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
-    # test.upload_to_db(user_order_data, 'orders_table')
+    user_order_data = DataCleaning_instance.clean_orders_data(DataExtractor_instance, test)
+    test.upload_to_db(user_order_data, 'orders_table')
 
     ### upload date_time_data
 
-    date_time_data = DataCleaning_instance.clean_date_times(DataExtractor_instance)
-    test.upload_to_db(date_time_data, 'dim_date_times')
+    # date_time_data = DataCleaning_instance.clean_date_times(DataExtractor_instance)
+    # test.upload_to_db(date_time_data, 'dim_date_times')
 
 
 
