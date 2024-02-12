@@ -28,6 +28,8 @@ ALTER TABLE dim_users DROP COLUMN user_uuid;
 -- Rename the new column to the original name
 ALTER TABLE dim_users RENAME COLUMN user_uuid_new TO user_uuid;
 
+ALTER TABLE dim_users
+ALTER COLUMN user_uuid TYPE UUID USING user_uuid::UUID;
 
 /* Display data types*/
 SELECT column_name, data_type

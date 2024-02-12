@@ -13,7 +13,7 @@ ALTER COLUMN day TYPE INTEGER USING day::INTEGER;
 -- Convert time_period and date_uuid to text
 ALTER TABLE dim_date_times
 ALTER COLUMN time_period TYPE TEXT,
-ALTER COLUMN date_uuid TYPE TEXT;
+ALTER COLUMN date_uuid TYPE UUID USING date_uuid::UUID;
 
 
 

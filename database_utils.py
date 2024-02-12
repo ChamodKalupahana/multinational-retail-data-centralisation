@@ -102,13 +102,12 @@ if __name__ == "__main__":
 
 
     # table = DataCleaning_instance.clean_user_data(DataExtractor_instance, test)
-
     # test.upload_to_db(table, 'dim_users')
 
     ### upload store data from api
     
-    # store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
-    # test.upload_to_db(store_data, 'dim_store_details')
+    store_data = DataCleaning_instance.called_clean_store_data(DataExtractor_instance)
+    test.upload_to_db(store_data, 'dim_store_details')
 
     ### upload card_data
 
@@ -127,8 +126,8 @@ if __name__ == "__main__":
 
     ### upload date_time_data
 
-    date_time_data = DataCleaning_instance.clean_date_times(DataExtractor_instance)
-    test.upload_to_db(date_time_data, 'dim_date_times')
+    # date_time_data = DataCleaning_instance.clean_date_times(DataExtractor_instance)
+    # test.upload_to_db(date_time_data, 'dim_date_times')
 
 
 

@@ -57,10 +57,16 @@ REFERENCES dim_date_times(date_uuid)
 
 /* Remove mismatching data */
 SELECT DISTINCT user_uuid
-FROM orders_table
-WHERE user_uuid NOT IN (SELECT user_uuid FROM dim_users);
+FROM dim_users
+WHERE user_uuid NOT IN (SELECT user_uuid FROM orders_table);
 
-DELETE FROM orders_table
+SELECT DISTINCT user_uuid
+FROM dim_users
+
+SELECT DISTINCT user_uuid
+FROM orders_table
+
+DELETE FROM dim_users
 WHERE user_uuid NOT IN (
     SELECT user_uuid FROM dim_users
 );
